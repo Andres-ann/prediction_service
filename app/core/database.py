@@ -39,7 +39,7 @@ def ensure_database_exists():
             exists = result.first()
             if not exists:
                 print(f"Creating database...")
-                conn.execute(text(f"CREATE DATABASE SUCCEFULLY"))
+                conn.execute(text(f"CREATE DATABASE {db_name}"))
                 print(f"Database created.")
             else:
                 print(f"Database already exists.")

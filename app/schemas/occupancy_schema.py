@@ -11,7 +11,7 @@ class Occupancy(BaseModel):
     )
 
     class Config:
-        schema_extra = {
+        json_schema_extra = {
             "example": {
                 "room": "room_name",
                 "date_hour_start": "2025-10-18T00:00:00",

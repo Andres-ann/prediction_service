@@ -6,7 +6,7 @@ import httpx
 from datetime import datetime
 from sqlalchemy.orm import Session
 from fastapi import HTTPException, Response
-from app.models.history import ReservationHistory
+from app.models.history_model import ReservationHistory
 from app.core.config import settings
 
 class DataCollectorService:

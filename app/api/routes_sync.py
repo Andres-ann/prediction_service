@@ -22,20 +22,20 @@ def get_db():
 @router.post(
     "/sync",
     tags=["Sync"],
-    summary="Sincronizar datos desde la API de reservas",
-    description="Obtiene los datos de reservas desde el microservicio de reservas y los almacena localmente en la base para análisis.",
+    summary="Synchronize data from the booking API",
+    description="Obtains reservation data from the reservation microservice and stores it locally in the database for analysis.",
     responses={
         200: {
-            "description": "Datos sincronizados correctamente",
+            "description": "Data synchronized successfully",
             "content": {
                 "application/json": {
                     "example": {"status": "ok", "records_imported": 100}
                 }
             },
         },
-        204: {"description": "No hay datos nuevos para sincronizar"},
-        401: {"description": "Unauthorized"},
-        500: {"description": "Error: Internal Server Error",
+        204: {"description": "There is no new data to sync."},
+        401: {"description": "Unauthorized."},
+        500: {"description": "Internal Server Error.",
               "content": {
                 "application/json": {
                     "example": {"detail":"Error message"}

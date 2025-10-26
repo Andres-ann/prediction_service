@@ -3,7 +3,7 @@ import pandas as pd
 import numpy as np
 from sklearn.linear_model import LinearRegression
 from sqlalchemy.orm import Session
-from app.models.history_model import ReservationHistory
+from app.schemas.history_schema import ReservationHistory
 
 # Valor por defecto para normalizar la probabilidad cuando no se conoce la capacidad real
 DEFAULT_ROOM_CAPACITY = 10

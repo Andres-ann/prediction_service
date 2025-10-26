@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 from sqlalchemy.exc import OperationalError
 from app.core.database import SessionLocal
 from app.services.predict.occupancy_service import OccupancyPredictionService
-from app.models.occupancy_model import Occupancy
+from app.schemas.occupancy_schema import Occupancy
 
 router = APIRouter()
 

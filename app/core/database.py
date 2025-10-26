@@ -57,7 +57,7 @@ SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 def init_db():
     """Crea las tablas si no existen."""
-    from app.models.history import ReservationHistory
+    from app.models.history_model import ReservationHistory
     print("Checking tables in the database")
     Base.metadata.create_all(bind=engine)
     print("Database and tables ready.")

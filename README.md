@@ -7,13 +7,10 @@ Su objetivo es desarrollar un **microservicio escalable** en **Python (FastAPI)*
 
 # 🎯 Objetivo del microservicio
 
-Proveer endpoints que permitan consultar predicciones sobre la demanda de reservas (de salas, artículos, etc.) a partir del historial existente.
+Proveer endpoints de predicción y análisis sobre la demanda de reservas (de salas, artículos, y patrones de uso) a partir del historial almacenado en la base de datos.
 
-El microservicio se comunicará con la base de datos que provee los datos históricos obtenidos de una fuente de datos externa (API), procesará la información y devolverá resultados como:
-
-- **Nivel de ocupación esperado.**
-- **Recursos con mayor probabilidad de ser reservados.**
-- **Recomendaciones de asignación.**
+El microservicio se conecta a una base de datos (MySQL en XAMPP o PostgreSQL si se configura), la cual contiene información histórica proveniente de una API externa.
+A partir de estos datos, se entrenan o aplican modelos analíticos ligeros para estimar tendencias y generar recomendaciones.
 
 ---
 

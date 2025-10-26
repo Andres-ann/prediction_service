@@ -10,12 +10,12 @@ router = APIRouter()
 
 @router.get(
     "/health",
-    tags=["Sistema"],
-    summary="Verifica el estado del microservicio",
-    description="Devuelve información básica sobre el estado, la versión y el entorno del microservicio.",
+    tags=["System"],
+    summary="Check the status of the microservice",
+    description="Returns basic information about the microservice's status, version, and environment.",
     responses={
         200: {
-            "description": "El servicio está activo y funcionando correctamente",
+            "description": "The service is active and working correctly.",
             "content": {
                 "application/json": {
                     "example": {
@@ -31,13 +31,9 @@ router = APIRouter()
 )
 def health_check():
     """
-    Endpoint de verificación de salud del sistema.
+    System health check endpoint.
+    Returns basic information about the microservice's status, version, and environment.
 
-    **Retorna:**
-    - `status`: Estado del servicio (`ok` si responde correctamente)
-    - `app_name`: Nombre del microservicio
-    - `version`: Versión actual del sistema
-    - `environment`: Entorno de ejecución (dev, staging, prod)
     """
     return {
         "status": "ok",

@@ -7,13 +7,10 @@ Su objetivo es desarrollar un **microservicio escalable** en **Python (FastAPI)*
 
 # 🎯 Objetivo del microservicio
 
-Proveer endpoints que permitan consultar predicciones sobre la demanda de reservas (de salas, artículos, etc.) a partir del historial existente.
+Proveer endpoints de predicción y análisis sobre la demanda de reservas (de salas, artículos, y patrones de uso) a partir del historial almacenado en la base de datos.
 
-El microservicio se comunicará con la base de datos o con otro servicio que le provea los datos históricos, procesará la información y devolverá resultados como:
-
-- **Nivel de ocupación esperado.**
-- **Recursos con mayor probabilidad de ser reservados.**
-- **Recomendaciones de asignación.**
+El microservicio se conecta a una base de datos (MySQL en XAMPP o PostgreSQL si se configura), la cual contiene información histórica proveniente de una API externa.
+A partir de estos datos, se entrenan o aplican modelos analíticos ligeros para estimar tendencias y generar recomendaciones.
 
 ---
 
@@ -89,7 +86,9 @@ Crear un archivo `.env` en la raíz del proyecto:
 ```bash
 APP_NAME=PredictionService
 APP_VERSION=1.0.0
-DATABASE_URL=postgresql+psycopg2://user:password@localhost:5432/prediction_db
+DATABASE_URL=mysql+pymysql://user:password@localhost:3306/predictions
+ADMIN_DATABASE_URL= mysql+pymysql://user:password@localhost:3306/
+EXTERNAL_API_URL=http://example.com
 ENV=development
 ```
 

@@ -78,18 +78,14 @@ class OccupancyPredictionService:
 
         # Determinar tendencia y recomendación
         if probability > 0.7:
-            trend = "alta"
-            recommendation = "¡Cuidado! Salas casi llenas. Intenta otro horario."
+            trend = "high"            
         elif probability > 0.4:
-            trend = "media"            
-            recommendation = "Disponibilidad Baja. Reserva pronto o considera otra fecha."
+            trend = "medium"
         else:
-            trend = "baja"
-            recommendation = "¡Buena disponibilidad! Reserva tu sala ahora."
+            trend = "low"
 
         return {
             "room": room,
             "occupation_probability": round(probability,2),
-            "trend": trend,
-            "recommendation": recommendation,
+            "trend": trend
         }

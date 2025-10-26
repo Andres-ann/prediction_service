@@ -30,8 +30,7 @@ def get_db():
                     "example": {
                         "room": "sala1",
                         "occupation_probability": 0.3,
-                        "trend": "baja",
-                        "recommendation": "¡Buena disponibilidad! Reserva tu sala ahora.",
+                        "trend": "low",
                     }
                 }
             },

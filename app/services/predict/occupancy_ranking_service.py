@@ -34,7 +34,7 @@ class OccupancyRankingService:
         df = pd.DataFrame(
             [
                 {
-                    "room": r.room,
+                    "room": r.room_name,
                     "date": r.date_hour_start.date(),
                 }
                 for r in records

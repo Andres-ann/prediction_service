@@ -26,11 +26,11 @@ class SeasonalPatternsService:
         df = pd.DataFrame(
             [
                 {
-                    "room": r.room,
+                    "room": r.room_name,
                     "weekday": r.date_hour_start.strftime("%A").lower(),  # día en texto
                 }
                 for r in records
-                if r.date_hour_start is not None and r.room
+                if r.date_hour_start is not None and r.room_name
             ]
         )
 
@@ -47,7 +47,7 @@ class SeasonalPatternsService:
 
         # Calcular días pico y bajos
         results = {}
-        for room, room_data in df_grouped.groupby("room"):
+        for room_name, room_data in df_grouped.groupby("room"):
             if len(room_data) == 0:
                 continue
 
@@ -55,7 +55,7 @@ class SeasonalPatternsService:
             peak_row = room_data.loc[room_data["count"].idxmax()]
             low_row = room_data.loc[room_data["count"].idxmin()]
 
-            results[room] = {
+            results[room_name] = {
                 "peak_day": peak_row["weekday"],
                 "low_day": low_row["weekday"],
             }

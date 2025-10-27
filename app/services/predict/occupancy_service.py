@@ -17,7 +17,7 @@ class OccupancyPredictionService:
     def __init__(self, db: Session):
         self.db = db
 
-    def predict_occupancy(self, room: str, date_hour_start: str, date_hour_end: str):
+    def predict_occupancy(self, room_name: str, date_hour_start: str, date_hour_end: str):
         """Predicts the probability of occupancy for a specific room."""
 
         # Convertir fechas a objetos datetime
@@ -30,7 +30,7 @@ class OccupancyPredictionService:
         # Obtener los registros históricos de la sala
         records = (
             self.db.query(ReservationHistory)
-            .filter(ReservationHistory.room == room)
+            .filter(ReservationHistory.room_name == room_name)
             .order_by(ReservationHistory.date_hour_start.asc())
             .all()
         )
@@ -85,7 +85,7 @@ class OccupancyPredictionService:
             trend = "low"
 
         return {
-            "room": room,
+            "room": room_name,
             "occupation_probability": round(probability,2),
             "trend": trend
         }

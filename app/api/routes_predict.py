@@ -50,7 +50,7 @@ def predict_occupancy(request: Occupancy, db: Session = Depends(get_db)):
 
     try:
         result = service.predict_occupancy(
-            request.room, request.date_hour_start, request.date_hour_end
+            request.room_name, request.date_hour_start, request.date_hour_end
         )
     except ValueError as ve:
         raise HTTPException(
@@ -70,7 +70,7 @@ def predict_occupancy(request: Occupancy, db: Session = Depends(get_db)):
     if result is None:
         raise HTTPException(
             status_code=404,
-            detail=f"There is no historical data for the room '{request.room}'",
+            detail=f"There is no historical data for the room '{request.room_name}'",
         )
 
     return result

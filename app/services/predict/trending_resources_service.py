@@ -1,9 +1,9 @@
+import json
 import pandas as pd
 import numpy as np
 from sklearn.linear_model import LinearRegression
 from sqlalchemy.orm import Session
-from ast import literal_eval
-from app.schemas.history_schema import ReservationHistory
+from app.schemas.history_schema import ReservationHistory 
 
 
 class TrendingResourcesService:
@@ -25,18 +25,33 @@ class TrendingResourcesService:
         if not records:
             return None
 
-        # Expandir cada artículo de cada reserva
         rows = []
         for r in records:
             if not r.articles:
                 continue
+
+            articles = []
             try:
-                # Puede venir como string tipo "['Proyector', 'Pizarra']"
-                articles = literal_eval(r.articles) if isinstance(r.articles, str) else r.articles
-                if isinstance(articles, str):
-                    articles = [articles]
+                # Deserializar JSON 
+                if isinstance(r.articles, str):
+                    articles_data = json.loads(r.articles)
+                else:
+                    articles_data = r.articles
+
+                # Validar estructura
+                if isinstance(articles_data, list):
+                    for art in articles_data:
+                        if isinstance(art, dict) and "name" in art:
+                            articles.append(art["name"])
+                        elif isinstance(art, str):
+                            articles.append(art.strip())
+                elif isinstance(articles_data, dict) and "name" in articles_data:
+                    articles = [articles_data["name"]]
+                elif isinstance(articles_data, str):
+                    articles = [a.strip() for a in articles_data.split(",") if a.strip()]
+
             except Exception:
-                # fallback: separar por coma
+                # fallback para datos viejos en texto plano
                 articles = [a.strip() for a in str(r.articles).split(",") if a.strip()]
 
             for art in articles:
@@ -68,20 +83,17 @@ class TrendingResourcesService:
             if len(y) < 2:
                 continue
 
-            # Tendencia con fallback simple si pocos puntos
+            # Tendencia: lineal si hay suficientes puntos
             if len(y) < 3:
                 change_pct = ((y[-1] - y[0]) / max(y[0], 1)) * 100
-                trust = 0.4  # baja confianza por pocos datos
+                trust = 0.4  
             else:
                 model = LinearRegression()
                 model.fit(t, y)
                 slope = model.coef_[0]
-                # tendencia porcentual esperada por unidad de tiempo
                 change_pct = (slope / max(np.mean(y), 1)) * 100
-                # confianza basada en la cantidad de puntos
                 trust = min(0.3 + len(y) * 0.1, 0.95)
 
-            # Clasificación de tendencia textual
             trend_symbol = f"{'+' if change_pct >= 0 else ''}{round(change_pct, 2)}%"
 
             results.append({
@@ -91,6 +103,6 @@ class TrendingResourcesService:
             })
 
         # Ordenar por tendencia descendente
-        results = sorted(results, key=lambda x: float(x["trend"].replace("%", "")), reverse=True)
+        results = sorted(results, key=lambda x: float(x["trend"].replace('%', '')), reverse=True)
 
         return results

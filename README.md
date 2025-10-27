@@ -1,7 +1,7 @@
 # 🧠 Microservicio de Predicción de Reservas
 
 Este proyecto forma parte del **Trabajo Práctico de la materia: Programación de Vanguardia 2025**.  
-Su objetivo es desarrollar un **microservicio escalable** en **Python (FastAPI)** que formará parte de una plataforma de gestión de reservas, incorporando en el futuro un módulo de **predicción de demanda**.
+Su objetivo es desarrollar un **microservicio escalable** en **Python (FastAPI)** que formará parte de una plataforma de gestión de reservas.
 
 ---
 
@@ -9,8 +9,14 @@ Su objetivo es desarrollar un **microservicio escalable** en **Python (FastAPI)*
 
 Proveer endpoints de predicción y análisis sobre la demanda de reservas (de salas, artículos, y patrones de uso) a partir del historial almacenado en la base de datos.
 
-El microservicio se conecta a una base de datos (MySQL en XAMPP o PostgreSQL si se configura), la cual contiene información histórica proveniente de una API externa.
+El microservicio se conecta a una base de datos MySQL, la cual contiene información histórica proveniente de una API externa.
 A partir de estos datos, se entrenan o aplican modelos analíticos ligeros para estimar tendencias y generar recomendaciones.
+
+- **/sync:** Obtiene datos de reservas del microservicio de reserva y los almacena en la base de datos para su análisis.
+- **/occupancy:** Predecir la probabilidad de que una sala esté ocupada entre dos fechas utilizando datos históricos de reservation_history.
+- **/occupancy-ranking:** Genera una clasificación predictiva de la ocupación de las salas para la semana (de lunes a viernes). Utiliza datos históricos de reservas para estimar la ocupación prevista.
+- **/trending-resources:** Devuelve las tendencias de uso de artículos del historial de reservas.
+- **/seasonal-patterns:** Detecta patrones de ocupación recurrentes (días de la semana con más y menos reservas) para cada sala.
 
 ---
 

@@ -3,11 +3,13 @@ Servicio encargado de traer y almacenar datos históricos desde la API de reserv
 """
 
 import httpx
+import json
 from datetime import datetime
 from sqlalchemy.orm import Session
 from fastapi import HTTPException, Response
-from app.schemas.history_schema import ReservationHistory
+from app.schemas.history_schema import ReservationHistory  # Asegurate de importar el modelo, no el schema
 from app.core.config import settings
+
 
 class DataCollectorService:
     """Sincroniza datos desde el microservicio de reservas."""
@@ -20,7 +22,7 @@ class DataCollectorService:
         """Obtiene los datos de la API externa y los guarda localmente."""
         try:
             async with httpx.AsyncClient() as client:
-                response = await client.get(f"{self.base_url}/reservation", timeout=10.0)
+                response = await client.get(f"{self.base_url}/reservation/get-all-reservation-details", timeout=10.0)
         except httpx.RequestError as e:
             raise HTTPException(status_code=500, detail=f"Error connecting to external API: {e}")
 
@@ -53,18 +55,36 @@ class DataCollectorService:
             rid = item.get("id")
             if rid in existing:
                 continue
+
             try:
+                # Parseo de subestructuras
+                room = item.get("room", {}) or {}
+                people = item.get("people", {}) or {}
+                articles = item.get("articles", []) or []
+
                 record = ReservationHistory(
                     reservation_id=rid,
-                    room=item.get("room", ""),
-                    people_name=item.get("people_name", ""),
-                    articles=", ".join(item.get("articles", [])) if item.get("articles") else None,
-                    date_hour_start=datetime.fromisoformat(item.get("date_hour_start")),
-                    date_hour_end=datetime.fromisoformat(item.get("date_hour_end")),
+                    room_id=room.get("id"),
+                    room_name=room.get("name", ""),
+                    room_capacity=room.get("capacity", 0),
+
+                    people_id=people.get("id"),
+                    people_name=people.get("name", ""),
+                    people_email=people.get("email", ""),
+
+                    expected_people=item.get("expected_people", 0),
+
+                    # Guardamos artículos serializados a JSON (lista de objetos)
+                    articles=json.dumps(articles) if articles else None,
+
+                    # Parseo de fechas
+                    date_hour_start=datetime.strptime(item.get("date_hour_start"), "%Y-%m-%d %H:%M:%S"),
+                    date_hour_end=datetime.strptime(item.get("date_hour_end"), "%Y-%m-%d %H:%M:%S"),
                     fetched_at=datetime.now(),
                 )
+
             except Exception as e:
-                raise HTTPException(status_code=500, detail=f"Error processing registration {rid}: {e}")
+                raise HTTPException(status_code=500, detail=f"Error processing reservation {rid}: {e}")
 
             self.db.add(record)
             imported += 1
@@ -78,4 +98,4 @@ class DataCollectorService:
             self.db.rollback()
             raise HTTPException(status_code=500, detail=f"Error saving to database: {e}")
 
-        return {"status": "ok", "records_imported": imported}
+        return {"status": "OK", "records_imported": imported}

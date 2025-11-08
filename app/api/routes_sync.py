@@ -1,16 +1,16 @@
 """
-Rutas para sincronizar datos desde la API de reservas hacia la base local.
+Rutas para sincronizar datos de reservas hacia la base local.
 """
 
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
-from app.services.data_collector_service import DataCollectorService
+from app.services.sync_service import DataCollectorService
 from app.core.database import SessionLocal
+from app.schemas.sync_schema import ReservationCreate
+from typing import List
 
 router = APIRouter()
 
-
-# Dependencia para obtener una sesión de la base de datos
 def get_db():
     db = SessionLocal()
     try:
@@ -18,35 +18,21 @@ def get_db():
     finally:
         db.close()
 
-
 @router.post(
-    "/sync",
+    "/sync", 
     tags=["Sync"],
-    summary="Synchronize data from the booking API",
-    description="Obtains reservation data from the reservation microservice and stores it locally in the database for analysis.",
-    responses={
-        200: {
-            "description": "Data synchronized successfully",
-            "content": {
-                "application/json": {
-                    "example": {"status": "ok", "records_imported": 100}
-                }
-            },
-        },
-        204: {"description": "There is no new data to sync."},
-        401: {"description": "Unauthorized."},
-        500: {"description": "Internal Server Error.",
-              "content": {
-                "application/json": {
-                    "example": {"detail":"Error message"}
-                }
-            },},
-    },
+    summary="Store reservation data",
+    description="Store a single reservation in the local database for analysis."
 )
-async def sync_data(db: Session = Depends(get_db)):
-    """
-    Obtiene los datos de reservas desde el microservicio de reservas
-    y los almacena localmente en la base para análisis.
-    """
+async def sync_data(
+    data: ReservationCreate,
+    db: Session = Depends(get_db)
+):
     collector = DataCollectorService(db)
-    return await collector.collect_data()
+    return collector.store_data(data)
+async def sync_data(
+    data: List[ReservationCreate],
+    db: Session = Depends(get_db)
+):
+    collector = DataCollectorService(db)
+    return await collector.store_data([reservation.model_dump() for reservation in data])

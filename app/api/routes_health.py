@@ -19,7 +19,7 @@ router = APIRouter()
             "content": {
                 "application/json": {
                     "example": {
-                        "status": "ok",
+                        "status": "OK",
                         "app_name": "PredictionService",
                         "version": "1.0.0",
                         "environment": "development"

@@ -1,4 +1,3 @@
-import json
 import pandas as pd
 import numpy as np
 from sklearn.linear_model import LinearRegression
@@ -30,29 +29,8 @@ class TrendingResourcesService:
             if not r.articles:
                 continue
 
-            articles = []
-            try:
-                # Deserializar JSON 
-                if isinstance(r.articles, str):
-                    articles_data = json.loads(r.articles)
-                else:
-                    articles_data = r.articles
-
-                # Validar estructura
-                if isinstance(articles_data, list):
-                    for art in articles_data:
-                        if isinstance(art, dict) and "name" in art:
-                            articles.append(art["name"])
-                        elif isinstance(art, str):
-                            articles.append(art.strip())
-                elif isinstance(articles_data, dict) and "name" in articles_data:
-                    articles = [articles_data["name"]]
-                elif isinstance(articles_data, str):
-                    articles = [a.strip() for a in articles_data.split(",") if a.strip()]
-
-            except Exception:
-                # fallback para datos viejos en texto plano
-                articles = [a.strip() for a in str(r.articles).split(",") if a.strip()]
+            # Separamos por comas
+            articles = [a.strip() for a in r.articles.split(",") if a.strip()]
 
             for art in articles:
                 rows.append({

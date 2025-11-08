@@ -39,10 +39,9 @@ prediction_service/
 ├── app/
 │   ├── main.py
 │   ├── api/
-│   │   └── routes_health.py
 │   ├── core/
 │   │   └── config.py
-│   ├── models/
+│   ├── schemas/
 │   └── services/
 ├── .env
 ├── requirements.txt

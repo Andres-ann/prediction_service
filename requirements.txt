@@ -9,3 +9,4 @@ httpx
 pandas
 scikit-learn
 pydantic-settings
+pika

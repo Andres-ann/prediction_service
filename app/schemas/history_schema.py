@@ -9,7 +9,6 @@ class ReservationHistory(Base):
     
     # Room
     room_name = Column(String(100), nullable=False)
-    expected_people = Column(Integer, nullable=False, default=0)
 
     # Person
     people_email = Column(String(150), nullable=False)

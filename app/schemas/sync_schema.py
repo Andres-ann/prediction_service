@@ -5,7 +5,6 @@ from typing import Optional, List
 class ReservationCreate(BaseModel):
     reservation_id: int
     room_name: str = Field(..., example="sala 1", description="Name of the room to be analyzed")
-    expected_people: int
     people_email: str
     articles: Optional[List[str]] = Field(
         default=None, 

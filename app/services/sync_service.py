@@ -23,7 +23,6 @@ class DataCollectorService:
             record = ReservationHistory(
                 reservation_id=data.reservation_id,
                 room_name=data.room_name,
-                expected_people=data.expected_people,
                 people_email=data.people_email,
                 articles=",".join(data.articles) if data.articles else None,
                 date_hour_start=data.date_hour_start,

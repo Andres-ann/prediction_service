@@ -4,3 +4,8 @@ pydantic
 python-dotenv
 psycopg2-binary
 sqlalchemy
+pymysql
+httpx
+pandas
+scikit-learn
+pydantic-settings
